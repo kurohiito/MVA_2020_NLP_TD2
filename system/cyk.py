@@ -25,13 +25,14 @@ def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
                         ch = tree1.root.value + ' ' + tree2.root.value
                         if ch in inv_grammar:
                             for tag in inv_grammar[ch]:
-                                tree1_c = copy.deepcopy(tree1)
-                                tree2_c = copy.deepcopy(tree2)
-                                root = Node(None, tag)
-                                tree1_c.root.parent = root
-                                tree2_c.root.parent = root
-                                root.children = [tree1_c.root, tree2_c.root]
-                                trees = trees.union({PCFG_Tree(root=root)})  
+                                if tag != 'SENT' or (tag == 'SENT' and i == n-1):
+                                    tree1_c = copy.deepcopy(tree1)
+                                    tree2_c = copy.deepcopy(tree2)
+                                    root = Node(None, tag)
+                                    tree1_c.root.parent = root
+                                    tree2_c.root.parent = root
+                                    root.children = [tree1_c.root, tree2_c.root]
+                                    trees = trees.union({PCFG_Tree(root=root)})  
             C[i].append(trees)
     trees = list(filter(lambda x: x.root.value == 'SENT', C[-1][0]))
     return trees

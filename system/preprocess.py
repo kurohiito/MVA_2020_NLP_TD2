@@ -1,7 +1,8 @@
 import numpy as np
 import re
+import os
 
-def Preprocess():
+if not os.path.exists('data/train_in.txt'):
     raw_data = open('data/sequoia-corpus+fct.mrg_strict', 'r').readlines()
     n = len(raw_data)
     idx = np.arange(n)

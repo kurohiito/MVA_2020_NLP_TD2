@@ -1,7 +1,6 @@
 import os
 import argparse
 
-from preprocess import * 
 from load_models import *
 from cyk import ParseSentence
 
@@ -10,11 +9,6 @@ p = argparse.ArgumentParser( description='Argument parser' )
 
 p.add_argument( '--file', type=str, required=True, help='Input file path' )
 args = p.parse_args()
-
-if not os.path.exists('data/train_in.txt'):
-    print('Preprocessing data')
-    Preprocess()
-    print('Preprocess done')
 
 print('Loading models...')
 word_id, id_word = LoadDictionary()

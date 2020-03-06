@@ -1,6 +1,7 @@
 import numpy as np
 import re
 import pickle
+
 from PCFG_tree import PCFG_Tree
 
 
@@ -13,6 +14,7 @@ DIGITS = re.compile("[0-9]", re.UNICODE)
 
 def LoadDictionary():
     #create list of words
+
     words = []
     for sentence in data_in:
         sentence = DIGITS.sub("#", sentence)

@@ -13,9 +13,11 @@ To run use command
 ./run.sh --file <input file path(must be a .txt file with a sentence in each row)> --timeLimit <time limit for one sentece in seconds>
 ```
   
-For evaluation the results use run the eval.py file
-There are three arguments <\br>
+For evaluation the results use run the `eval.py` file
+
+There are three arguments 
+```
 --parsedOutput: Parsed text file path
 --input: Input text file path
 --output: The output file
-
+```

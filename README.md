@@ -9,9 +9,9 @@ Before to run make sure that there are the following files in directory "data"
 2) 'polyglot-fr.pkl' (downloadable here https://sites.google.com/site/rmyeid/projects/polyglot) - french vocabulary embeddings
 
 To run use command 
-'''
+```
 ./run.sh --file <input file path(must be a .txt file with a sentence in each row)> --timeLimit <time limit for one sentece in seconds>
-'''
+```
   
 For evaluation the results use run the eval.py file
 There are three arguments <\br>

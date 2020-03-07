@@ -1,8 +1,10 @@
 import numpy as np
 import copy
+import time
 
 from PCFG_tree import *
 from oov import NormalizeSentence
+
 
 def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
     C = [[]]
@@ -14,13 +16,15 @@ def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
             child = Node(par, word)
             trees = trees.union({par})
         C[0].append(trees)
-    
+    start = time.time()
     for i in range(1, n):
         C.append([])
         for j in range(n-i):
             trees = []
             for k in range(i):
                 first_tags = list(filter(lambda x: not '|' in x.value, C[k][j]))
+                if time.time() - start > 300:
+                    return []
                 for tree1 in first_tags:
                     for tree2 in C[i-k-1][j+k+1]:
                         ch = tree1.value + ' ' + tree2.value
@@ -30,21 +34,26 @@ def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
                                 if '|' in tag:
                                     l = len(tag.split('|'))
                                     cond2 = j + 1 >= l
-                                else:
-                                    cond2 = True
-                                if cond1 or cond2:
+                                if (cond1 or cond2):
                                     root = Node(None, tag)
                                     root.children = [tree1, tree2]
-                                    trees.append(root)
-                                    if root.children == []:
-                                        print('err')
+                                    tag_list = list(map(lambda x: x.value, trees))
+                                    if tag in tag_list:
+                                        idx = tag_list.index(tag)
+                                        p1 = grammar[tag][' '.join(trees[idx].GetChildrenValues())]
+                                        p2 = grammar[tag][ch]
+                                        if p2 > p1:
+                                            trees.append(root)
+                                    else:
+                                        trees.append(root)
             C[i].append(set(trees))
+        print(str(i) + "/" + str(n))
     trees = []
     for tree in C[-1][0]:
         if 'SENT' in tree.value:
             trees.append(PCFG_Tree(root=tree))
     return trees
-
+                
 def ParseSentence(sentence, embeddings, word_id_big,\
               id_word_big, word_id, grammar, inv_grammar, lexicon, mat):
 

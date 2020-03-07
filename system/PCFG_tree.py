@@ -18,7 +18,11 @@ class Node:
     
     def IsWord(self):
         return self.children == []
-
+    
+    def Copy(self):
+        new_node = Node(self.parent, self.value)
+        new_node.children = self.children
+        return new_node
 
 class PCFG_Tree:
     def __init__(self, sentence=None, root=None):
@@ -44,7 +48,8 @@ class PCFG_Tree:
                     current_node = new_node
             self.leafs.append(words[-1].replace(')', ''))
         else:
-            self.root = root
+            self.root = root.Copy()
+            self.Reconstruct()
     
     def ExtractGrammar(self, node=None):
         if node is None:
@@ -186,4 +191,25 @@ class PCFG_Tree:
                     ite = ite.parent.children[idx+1]
         return sentence
             
+    def Reconstruct(self, node=None):
+        if node == None:
+            node = self.root
         
+        if len(node.children) > 0:
+            if not node.children[0].IsWord():
+                children = node.children
+                node.children = []
+                for child in children:
+                    new_child = child.Copy()
+                    new_child.parent = node
+                    node.children.append(new_child)
+                    
+                for child in node.children:
+                    self.Reconstruct(child)
+            else:
+                child = node.children[0]
+                child.parent = None
+                new_child = child.Copy()
+                new_child.parent = node
+                node.children = [new_child]
+                

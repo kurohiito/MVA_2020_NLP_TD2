@@ -12,29 +12,37 @@ def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
         for pos in lexicon[word].keys():
             par = Node(None, pos)
             child = Node(par, word)
-            trees = trees.union({PCFG_Tree(root=par)})
+            trees = trees.union({par})
         C[0].append(trees)
     
     for i in range(1, n):
         C.append([])
         for j in range(n-i):
-            trees = set()
+            trees = []
             for k in range(i):
-                for tree1 in C[k][j]:
+                first_tags = list(filter(lambda x: not '|' in x.value, C[k][j]))
+                for tree1 in first_tags:
                     for tree2 in C[i-k-1][j+k+1]:
-                        ch = tree1.root.value + ' ' + tree2.root.value
-                        if ch in inv_grammar:
+                        ch = tree1.value + ' ' + tree2.value
+                        if ch in inv_grammar:             
                             for tag in inv_grammar[ch]:
-                                if tag != 'SENT' or (tag == 'SENT' and i == n-1):
-                                    tree1_c = copy.deepcopy(tree1)
-                                    tree2_c = copy.deepcopy(tree2)
+                                cond1 = '|' not in tag
+                                if '|' in tag:
+                                    l = len(tag.split('|'))
+                                    cond2 = j + 1 >= l
+                                else:
+                                    cond2 = True
+                                if cond1 or cond2:
                                     root = Node(None, tag)
-                                    tree1_c.root.parent = root
-                                    tree2_c.root.parent = root
-                                    root.children = [tree1_c.root, tree2_c.root]
-                                    trees = trees.union({PCFG_Tree(root=root)})  
-            C[i].append(trees)
-    trees = list(filter(lambda x: x.root.value == 'SENT', C[-1][0]))
+                                    root.children = [tree1, tree2]
+                                    trees.append(root)
+                                    if root.children == []:
+                                        print('err')
+            C[i].append(set(trees))
+    trees = []
+    for tree in C[-1][0]:
+        if 'SENT' in tree.value:
+            trees.append(PCFG_Tree(root=tree))
     return trees
 
 def ParseSentence(sentence, embeddings, word_id_big,\

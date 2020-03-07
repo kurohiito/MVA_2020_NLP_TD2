@@ -28,7 +28,7 @@ data = open(args.file, 'r').readlines()
 n = str(len(data))
 i = 1
 for sent in data:
-	print('Parsing sentence ' + str(i) + '/' + n + '')
+	print('Parsing sentence ' + str(i) + '/' + n + ', Sentence length: ' + str(len(sent.split())))
 	i += 1
 	parsed = ParseSentence(sent, embeddings, word_id_big,\
 	             id_word_big, word_id, Grammar, Inv_Grammar, Lexicon, Bigram_Matrix)

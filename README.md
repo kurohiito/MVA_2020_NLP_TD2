@@ -12,7 +12,7 @@ To run use command ./run.sh --file <input file path(must be a .txt file with a s
   
   
 For evaluation the results use run the eval.py file
-There are three arguments
+There are three arguments <\br>
 --parsedOutput: Parsed text file path
 --input: Input text file path
 --output: The output file

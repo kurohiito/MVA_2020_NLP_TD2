@@ -8,6 +8,8 @@ from cyk import ParseSentence
 p = argparse.ArgumentParser( description='Argument parser' )
 
 p.add_argument( '--file', type=str, required=True, help='Input file path' )
+p.add_argument( '--timeLimit', type=int, required=False, default=300, help='Input file path' )
+
 args = p.parse_args()
 
 print('Loading models...')
@@ -31,7 +33,7 @@ for sent in data:
 	print('Parsing sentence ' + str(i) + '/' + n + ', Sentence length: ' + str(len(sent.split())))
 	i += 1
 	parsed = ParseSentence(sent, embeddings, word_id_big,\
-	             id_word_big, word_id, Grammar, Inv_Grammar, Lexicon, Bigram_Matrix)
+	             id_word_big, word_id, Grammar, Inv_Grammar, Lexicon, Bigram_Matrix, args.timeLimit)
 	file.write(parsed + '\n')
 
 file.close()

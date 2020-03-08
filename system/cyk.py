@@ -6,7 +6,7 @@ from PCFG_tree import *
 from oov import NormalizeSentence
 
 
-def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
+def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon, time_lim):
     C = [[]]
     n = len(sentence)
     for word in sentence:
@@ -23,7 +23,7 @@ def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
             trees = []
             for k in range(i):
                 first_tags = list(filter(lambda x: not '|' in x.value, C[k][j]))
-                if time.time() - start > 300:
+                if time.time() - start > time_lim:
                     return []
                 for tree1 in first_tags:
                     for tree2 in C[i-k-1][j+k+1]:
@@ -47,7 +47,6 @@ def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
                                     else:
                                         trees.append(root)
             C[i].append(set(trees))
-        print(str(i) + "/" + str(n))
     trees = []
     for tree in C[-1][0]:
         if 'SENT' in tree.value:
@@ -55,10 +54,14 @@ def GetPossibleParsings(sentence, grammar, inv_grammar, lexicon):
     return trees
                 
 def ParseSentence(sentence, embeddings, word_id_big,\
-              id_word_big, word_id, grammar, inv_grammar, lexicon, mat):
+              id_word_big, word_id, grammar, inv_grammar, lexicon, mat, time_lim):
 
     norm_sentence = NormalizeSentence(sentence, embeddings, word_id_big, id_word_big, word_id, mat)
-    trees = GetPossibleParsings(norm_sentence, grammar, inv_grammar, lexicon)
+    
+    if len(norm_sentence) > 40:
+        return "Cannot find valid parsing"
+
+    trees = GetPossibleParsings(norm_sentence, grammar, inv_grammar, lexicon, time_lim)
     if len(trees) == 0:
         return "Cannot find valid parsing"
 

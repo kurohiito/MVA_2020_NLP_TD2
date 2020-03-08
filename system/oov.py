@@ -9,12 +9,12 @@ def LevDistance(s1, s2):
     l2 = list(s2)
     n1 = len(l1)
     n2 = len(l2)
-    m = np.zeros((n1, n2))
-    m[:, 0] = np.arange(n1)
-    m[0, :] = np.arange(n2)
-    for i in range(1, n1):
-        for j in range(1, n2):
-            if l1[i] == l2[j]:
+    m = np.zeros((n1+1, n2+1))
+    m[:, 0] = np.arange(n1+1)
+    m[0, :] = np.arange(n2+1)
+    for i in range(1, n1+1):
+        for j in range(1, n2+1):
+            if l1[i-1] == l2[j-1]:
                 m[i, j] = min(m[i-1, j]+1, m[i, j-1]+1, m[i-1, j-1])
             else:
                 m[i, j] = min(m[i-1, j]+1, m[i, j-1]+1, m[i-1, j-1]+1)

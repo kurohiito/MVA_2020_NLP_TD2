@@ -183,7 +183,7 @@ class PCFG_Tree:
                     if ite == self.root:
                         break
                 if ite == self.root:
-                    sentence += ')\n'
+                    sentence += ')'
                     break
                 else:
                     sentence += ' '

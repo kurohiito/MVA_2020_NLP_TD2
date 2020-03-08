@@ -57,10 +57,6 @@ def ParseSentence(sentence, embeddings, word_id_big,\
               id_word_big, word_id, grammar, inv_grammar, lexicon, mat, time_lim):
 
     norm_sentence = NormalizeSentence(sentence, embeddings, word_id_big, id_word_big, word_id, mat)
-    
-    if len(norm_sentence) > 40:
-        return "Cannot find valid parsing"
-
     trees = GetPossibleParsings(norm_sentence, grammar, inv_grammar, lexicon, time_lim)
     if len(trees) == 0:
         return "Cannot find valid parsing"

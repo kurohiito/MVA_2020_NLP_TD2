@@ -15,9 +15,8 @@ To run use command
   
 For evaluation the results use run the `eval.py` file
 
-There are three arguments 
+There are two arguments 
 ```
 --parsedOutput: Parsed text file path
---input: Input text file path
 --output: The output file
 ```
